@@ -85,14 +85,9 @@ let topMovies = [
     }
 ];
 
-app.use(express.static('public'));
-
 app.use(morgan('common'));
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Whoops, we broke it again, didn\'t we?');
-});
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
     res.send('You just navigated to an empty page. Why did you do that?');
@@ -100,6 +95,11 @@ app.get('/', (req, res) => {
 
 app.get('/movies', (req, res) => {
     res.json(topMovies);
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Whoops, we broke it again, didn\'t we?');
 });
 
 app.listen(8080, () => {

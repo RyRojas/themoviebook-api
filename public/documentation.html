@@ -11,5 +11,153 @@
         (including actors, directors, genres, etc.) allowing users to create an account, 
         create a list of favorites, and search/sort/filter by whatever they want.
     </p>
+
+    <h2>User Endpoints</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Request</th>
+                <th>URL</th>
+                <th>Method</th>
+                <th>Request body data format</th>
+                <th>Response body data format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Register new user</td>
+                <td>/users</td>
+                <td>POST</td>
+                <td>JSON Object</td>
+                <td>A plaintext message indicating user registration was successful.</td>
+            </tr>
+            <tr>
+                <td>Retrieve user by username</td>
+                <td>/users/[user]</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>A JSON object containing data for the requested user.</td>
+            </tr>
+            <tr>
+                <td>Update user information</td>
+                <td>/users/[user]</td>
+                <td>PUT</td>
+                <td>JSON Object</td>
+                <td>A plaintext message indicating user information was successfully updated.</td>
+            </tr>
+            <tr>
+                <td>Deregister current user</td>
+                <td>/users/[user]</td>
+                <td>DELETE</td>
+                <td>None</td>
+                <td>A plaintext message indicating user account successfully deleted.</td>
+            </tr>
+            <tr>
+                <th>FAVORITES</th>
+            </tr>
+            <tr>
+                <td>Retrieve list of user favorites</td>
+                <td>/users/[user]/favs</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>A JSON object containing data for all user favorites.</td>
+            </tr>
+            <tr>
+                <td>Add movie to user favorites list.</td>
+                <td>/users/[user]/favs</td>
+                <td>POST</td>
+                <td>None</td>
+                <td>A plaintext message indicating movie was successfully added to favorites.</td>
+            </tr>
+            <tr>
+                <td>Delete movie from user favorites list.</td>
+                <td>/users/[user]/favs/[id]</td>
+                <td>DELETE</td>
+                <td>None</td>
+                <td>A plaintext message indicating movie was successfully removed from favorites.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Movie Endpoints</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Request</th>
+                <th>URL</th>
+                <th>Method</th>
+                <th>Request body data format</th>
+                <th>Response body data format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Retrieve list of all movies</td>
+                <td>/movies</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>A JSON object containing data of all movies in the database.</td>
+            </tr>
+            <tr>
+                <td>Retrieve movie by title</td>
+                <td>/movies/[title]</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>A JSON object containing data for the requested title.</td>
+            </tr>
+            <tr>
+                <td>Retrieve movies by director/actor</td>
+                <!-- Will revisit to change this endpoint later when the full structure is more apparent-->
+                <td>/movies/talent/[name]</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>A JSON object containing data for all movies featuring requested talent.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Genre Endpoints</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Request</th>
+                <th>URL</th>
+                <th>Method</th>
+                <th>Request body data format</th>
+                <th>Response body data format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Retrieve genre info</td>
+                <td>/genres/[genre]</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>A JSON object containing description of the requested genre.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Director Endpoints</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Request</th>
+                <th>URL</th>
+                <th>Method</th>
+                <th>Request body data format</th>
+                <th>Response body data format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Retrieve director bio</td>
+                <td>/directors/[director]</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>A JSON object containing the biographical information of the requested director.</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

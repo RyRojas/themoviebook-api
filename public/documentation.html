@@ -28,7 +28,14 @@
                 <td>Register new user</td>
                 <td>/users</td>
                 <td>POST</td>
-                <td>JSON Object</td>
+                <td>JSON Object containing data of user to add:<br>
+                    {<br>
+                    "id": 1,<br>
+                    "username": "ryrojas",<br>
+                    "password": "encryptedpassword",<br>
+                    "email": "email@email.email",<br>
+                    "dateOfBirth": "2021-03-10"<br>
+                    }</td>
                 <td>A plaintext message indicating user registration was successful.</td>
             </tr>
             <tr>
@@ -42,7 +49,12 @@
                 <td>Update user information</td>
                 <td>/users/[user]</td>
                 <td>PUT</td>
-                <td>JSON Object</td>
+                <td>JSON Object containing data to modify:
+                    {<br>
+                    "id": 1,<br>
+                    "password": "ohnoiwashacked",<br>
+                    }
+                </td>
                 <td>A plaintext message indicating user information was successfully updated.</td>
             </tr>
             <tr>

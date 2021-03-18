@@ -7,7 +7,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 
 mongoose.connect('mongodb://localhost:27017/theMovieBookDB',
-    { useNewUrlParser: true, useUnifiedTopology: true });
+    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 const app = express();
 
@@ -67,8 +67,8 @@ app.get('/directors/:director', (req, res) => {
 
 //Register new user
 app.post('/users', (req, res) => {
-    Users.findOne({ Username: req.body.Username }).
-        then((user) => {
+    Users.findOne({ Username: req.body.Username })
+        .then((user) => {
             if (user) {
                 return res.status(400).send(req.body.Username + ' already exists.');
             } else {
@@ -93,22 +93,24 @@ app.post('/users', (req, res) => {
 
 //Update user info
 app.put('/users/:user', (req, res) => {
-    Users.findOneAndUpdate(
-        { Username: req.params.user }, 
-        {$set:
-            {
-                Username: req.body.Username,
-                Password: req.body.Password,
-                Email: req.body.Email,
-                Birth: req.body.Birth
-            }
-        },
-        { new: true })
+    const { Username, Password, Email, Birth } = req.body;
+    if ( Username || Password || Email || Birth) {
+        Users.findOneAndUpdate(
+            { Username: req.params.user },
+            { $set:
+                {
+                    ...req.body
+                }
+            },
+            { new: true})
         .then(updatedUser => res.json(updatedUser))
         .catch((err) => {
             console.error(err);
             res.status(500).send('Error: ' + err);
         });
+    } else {
+    res.status(200).send('No fields to update');
+    }
 });
 
 //Retrieve user profile

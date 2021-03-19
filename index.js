@@ -32,12 +32,22 @@ app.get('/', (req, res) => {
 
 //Retrieve list of all movies
 app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.find().then(movies => res.json(movies));
+    Movies.find()
+        .then(movies => res.json(movies))
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
 //Retrieve movie by title
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.find({ Title: req.params.title }).then(movies => res.json(movies));
+    Movies.find({ Title: req.params.title })
+        .then(movies => res.json(movies))
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
 //Retrieve movies by talent (will revisit to include actors after we cover MongoDB Atlas)

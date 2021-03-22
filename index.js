@@ -1,6 +1,8 @@
-const express = require('express'),
-    mongoose = require('mongoose'),
+const cors = require('cors'),
+    express = require('express'),
+    { check, validationResult } = require('express-validator'),
     Models = require('./models.js'),
+    mongoose = require('mongoose'),
     morgan = require('morgan'),
     passport = require('passport');
 
@@ -13,6 +15,21 @@ mongoose.connect('mongodb://localhost:27017/theMovieBookDB',
     { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 const app = express();
+
+//Configure and run CORS
+let allowedOrigins = ['http://localhost:8080', 'http:themoviebook.com'],
+    corsOptions = {
+        origin: (origin, callback) => {
+            if (!origin) return callback(null, true);
+            if(allowedOrigins.indexOf(origin) === -1) {
+                let message = 'The CORS policy for this application doesn\'t allow access from origin ' + origin;
+                return callback(new Error(message), false);
+            }
+            return callback(null, true);
+        }
+    };
+
+app.use(cors(corsOptions));
 
 //Morgan logging middleware
 app.use(morgan('common'));
@@ -82,39 +99,49 @@ app.get('/directors/:director', passport.authenticate('jwt', { session: false })
 
 //Register new user -- No auth required
 app.post('/users', (req, res) => {
-    Users.findOne({ Username: req.body.Username })
-        .then((user) => {
-            if (user) {
-                return res.status(400).send(req.body.Username + ' already exists.');
-            } else {
-                Users
-                    .create({
-                        Username: req.body.Username,
-                        Password: req.body.Password,
-                        Email: req.body.Email,
-                        Birth: req.body.Birth
-                    })
-                    .then((user) => { res.status(201).json(user) })
-                    .catch((error) => {
-                        console.error(error);
-                        res.status(500).send('Error: ' + error);
-                    })
-            }
-        }).catch((error) => {
-            console.error(error);
-            res.status(500).send('Error: ' + error);
-        });
+
+        let hashedPassword = Users.hashPassword(req.body.Password);
+
+        Users.findOne({ Username: req.body.Username })
+            .then((user) => {
+                if (user) {
+                    return res.status(400).send(req.body.Username + ' already exists.');
+                } else {
+                    Users
+                        .create({
+                            Username: req.body.Username,
+                            Password: hashedPassword,
+                            Email: req.body.Email,
+                            Birth: req.body.Birth
+                        })
+                        .then((user) => { res.status(201).json(user) })
+                        .catch((error) => {
+                            console.error(error);
+                            res.status(500).send('Error: ' + error);
+                        })
+                }
+            }).catch((error) => {
+                console.error(error);
+                res.status(500).send('Error: ' + error);
+            });
 });
 
 //Update user info
 app.put('/users/:user', passport.authenticate('jwt', { session: false }), (req, res) => {
+    //Fields we are expecting/accept
     const { Username, Password, Email, Birth } = req.body;
+
+    //The double if (Password) doesn't sit well with me. Target for future refactor
     if ( Username || Password || Email || Birth) {
+        if (Password) {
+            req.body.Password = Users.hashPassword(Password);
+        }
+
         Users.findOneAndUpdate(
             { Username: req.params.user },
             { $set:
                 {
-                    ...req.body
+                    ...req.body //Pass body into db
                 }
             },
             { new: true})
@@ -169,8 +196,8 @@ app.post('/users/:user/favs', passport.authenticate('jwt', { session: false }), 
     Users.findOneAndUpdate(
         { Username: req.params.user},
         { $push: { Favorites: req.body.MovieID }},
-        { new: true}
-        ).then(updatedUser => res.json(updatedUser))
+        { new: true })
+        .then(updatedUser => res.json(updatedUser))
         .catch((err) => {
             console.error(err);
             res.status(500).send('Error: ' + err);
@@ -182,8 +209,8 @@ app.delete('/users/:user/favs/:id', passport.authenticate('jwt', { session: fals
     Users.findOneAndUpdate(
         { Username: req.params.user},
         { $pull: { Favorites: req.params.id }},
-        { new: true}
-        ).then(updatedUser => res.json(updatedUser))
+        { new: true })
+        .then(updatedUser => res.json(updatedUser))
         .catch((err) => {
             console.error(err);
             res.status(500).send('Error: ' + err);

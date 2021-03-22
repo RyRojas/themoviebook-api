@@ -20,7 +20,12 @@ const passport = require('passport'),
 
             if (!user) {
                 console.log('Incorrect username');
-                return callback(null, false, { message: 'Incorrect username or password.' });
+                return callback(null, false, { message: 'Incorrect username.' });
+            }
+
+            if (!user.validatePassword(password)) {
+                console.log('Incorrect Password');
+                return callback(null, false, { message: 'Incorrect password.' });
             }
 
             console.log('Finished');

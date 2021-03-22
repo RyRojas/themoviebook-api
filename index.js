@@ -98,7 +98,19 @@ app.get('/directors/:director', passport.authenticate('jwt', { session: false })
 });
 
 //Register new user -- No auth required
-app.post('/users', (req, res) => {
+app.post('/users', [
+        check('Username', 'Username is required.').not().isEmpty(),
+        check('Username', 'Username must contain only alphanumeric characters.').isAlphanumeric(),
+        check('Password', 'Password is required.').not().isEmpty(),
+        check('Password', 'Password must be a minimum of 16 characters long').isLength({ min: 16 }),
+        check('Email', 'Email is not valid.').isEmail().normalizeEmail()
+    ], (req, res) => {
+        //Check validation object for errors
+        let errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
 
         let hashedPassword = Users.hashPassword(req.body.Password);
 
@@ -127,7 +139,22 @@ app.post('/users', (req, res) => {
 });
 
 //Update user info
-app.put('/users/:user', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.put('/users/:user',
+    [
+        check('Username', 'Username must contain only alphanumeric characters.').optional().isAlphanumeric(),
+        check('Password', 'Password must be a minimum of 16 characters long').optional().isLength({ min: 16 }),
+        check('Email', 'Email is not valid.').optional().isEmail().normalizeEmail()
+    ],
+    passport.authenticate('jwt',
+    { session: false }),
+    (req, res) => {
+    
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+
     //Fields we are expecting/accept
     const { Username, Password, Email, Birth } = req.body;
 

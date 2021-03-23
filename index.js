@@ -11,13 +11,14 @@ require('./passport.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect('mongodb://localhost:27017/theMovieBookDB',
+//mongoose.connect('mongodb://localhost:27017/theMovieBookDB',
+mongoose.connect(process.env.CONNECTION_URI,
     { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 const app = express();
 
 //Configure and run CORS
-let allowedOrigins = ['http://localhost:8080', 'http:themoviebook.com'],
+let allowedOrigins = ['http://localhost:8080', 'https://the-moviebook.herokuapp.com/'],
     corsOptions = {
         origin: (origin, callback) => {
             if (!origin) return callback(null, true);

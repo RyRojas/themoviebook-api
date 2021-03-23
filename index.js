@@ -68,7 +68,7 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
         });
 });
 
-//Retrieve movies by talent (will revisit to include actors after we cover MongoDB Atlas)
+//Retrieve movies by talent (may revisit to include actors while building frontend)
 app.get('/movies/talent/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find( {'Director.Name': req.params.name})
         .then(movies => res.json(movies))

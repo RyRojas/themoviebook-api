@@ -30,36 +30,35 @@
                 <td>POST</td>
                 <td>JSON Object containing data of user to add:<br>
                     {<br>
-                    "id": 1,<br>
-                    "username": "ryrojas",<br>
-                    "password": "encryptedpassword",<br>
-                    "email": "email@email.email",<br>
-                    "dateOfBirth": "2021-03-10"<br>
+                    "Username": "ryrojas",<br>
+                    "Password": "encryptedpassword",<br>
+                    "Email": "email@email.email",<br>
+                    "Birth": "2021-03-10"<br>
                     }</td>
                 <td>A plaintext message indicating user registration was successful.</td>
             </tr>
             <tr>
                 <td>Retrieve user by username</td>
-                <td>/users/[user]</td>
+                <td>/users/[username]</td>
                 <td>GET</td>
                 <td>None</td>
                 <td>A JSON object containing data for the requested user.</td>
             </tr>
             <tr>
                 <td>Update user information</td>
-                <td>/users/[user]</td>
+                <td>/users/[username]</td>
                 <td>PUT</td>
                 <td>JSON Object containing data to modify:
                     {<br>
-                    "id": 1,<br>
-                    "password": "ohnoiwashacked",<br>
+                    "Password": "ohnoiwashacked",<br>
+                    "Email": "backupemail@gmail.com",<br>
                     }
                 </td>
                 <td>A plaintext message indicating user information was successfully updated.</td>
             </tr>
             <tr>
                 <td>Deregister current user</td>
-                <td>/users/[user]</td>
+                <td>/users/[username]</td>
                 <td>DELETE</td>
                 <td>None</td>
                 <td>A plaintext message indicating user account successfully deleted.</td>
@@ -69,21 +68,21 @@
             </tr>
             <tr>
                 <td>Retrieve list of user favorites</td>
-                <td>/users/[user]/favs</td>
+                <td>/users/[username]/favs</td>
                 <td>GET</td>
                 <td>None</td>
                 <td>A JSON object containing data for all user favorites.</td>
             </tr>
             <tr>
                 <td>Add movie to user favorites list.</td>
-                <td>/users/[user]/favs</td>
+                <td>/users/[username]/favs</td>
                 <td>POST</td>
                 <td>None</td>
                 <td>A plaintext message indicating movie was successfully added to favorites.</td>
             </tr>
             <tr>
                 <td>Delete movie from user favorites list.</td>
-                <td>/users/[user]/favs/[id]</td>
+                <td>/users/[username]/favs/[movieId]</td>
                 <td>DELETE</td>
                 <td>None</td>
                 <td>A plaintext message indicating movie was successfully removed from favorites.</td>
@@ -164,7 +163,7 @@
         <tbody>
             <tr>
                 <td>Retrieve director bio</td>
-                <td>/directors/[director]</td>
+                <td>/directors/[name]</td>
                 <td>GET</td>
                 <td>None</td>
                 <td>A JSON object containing the biographical information of the requested director.</td>

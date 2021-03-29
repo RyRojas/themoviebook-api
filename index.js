@@ -18,7 +18,7 @@ mongoose.connect(process.env.CONNECTION_URI,
 const app = express();
 
 //Configure and run CORS
-let allowedOrigins = ['http://localhost:8080', 'https://the-moviebook.herokuapp.com/'],
+let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://the-moviebook.herokuapp.com/'],
     corsOptions = {
         origin: (origin, callback) => {
             if (!origin) return callback(null, true);
@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 });
 
 //Retrieve list of all movies
-app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies', (req, res) => {
     Movies.find()
         .then(movies => res.json(movies))
         .catch((err) => {

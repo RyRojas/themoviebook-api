@@ -103,7 +103,7 @@ app.post('/users', [
         check('Username', 'Username is required.').not().isEmpty(),
         check('Username', 'Username must contain only alphanumeric characters.').isAlphanumeric(),
         check('Password', 'Password is required.').not().isEmpty(),
-        check('Password', 'Password must be a minimum of 16 characters long').isLength({ min: 16 }),
+        check('Password', 'Password must be a minimum of 8 characters long').isLength({ min: 8 }),
         check('Email', 'Email is not valid.').isEmail().normalizeEmail()
     ], (req, res) => {
         //Check validation object for errors
@@ -143,44 +143,44 @@ app.post('/users', [
 app.put('/users/:username',
     [
         check('Username', 'Username must contain only alphanumeric characters.').optional().isAlphanumeric(),
-        check('Password', 'Password must be a minimum of 16 characters long').optional().isLength({ min: 16 }),
+        check('Password', 'Password must be a minimum of 8 characters long').optional().isLength({ min: 8 }),
         check('Email', 'Email is not valid.').optional().isEmail().normalizeEmail()
     ],
     passport.authenticate('jwt',
-    { session: false }),
-    (req, res) => {
-    
-    let errors = validationResult(req);
+        { session: false }),
+        (req, res) => {
+        
+            let errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
-    }
+            if (!errors.isEmpty()) {
+                return res.status(422).json({ errors: errors.array() });
+            }
 
-    //Fields we are expecting/accept
-    const { Username, Password, Email, Birth } = req.body;
+            //Fields we are expecting/accept
+            const { Username, Password, Email, Birth } = req.body;
 
-    //The double if (Password) doesn't sit well with me. Target for future refactor
-    if ( Username || Password || Email || Birth) {
-        if (Password) {
-            req.body.Password = Users.hashPassword(Password);
-        }
-
-        Users.findOneAndUpdate(
-            { Username: req.params.username },
-            { $set:
-                {
-                    ...req.body //Pass body into db
+            //The double if (Password) doesn't sit well with me. Target for future refactor
+            if ( Username || Password || Email || Birth) {
+                if (Password) {
+                    req.body.Password = Users.hashPassword(Password);
                 }
-            },
-            { new: true})
-        .then(updatedUser => res.json(updatedUser))
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
-    } else {
-    res.status(200).send('No fields to update');
-    }
+
+                Users.findOneAndUpdate(
+                    { Username: req.params.username },
+                    { $set:
+                        {
+                            ...req.body //Pass body into db
+                        }
+                    },
+                    { new: true})
+                .then(updatedUser => res.json(updatedUser))
+                .catch((err) => {
+                    console.error(err);
+                    res.status(500).send('Error: ' + err);
+                });
+            } else {
+            res.status(200).send('No fields to update');
+            }
 });
 
 //Retrieve user profile

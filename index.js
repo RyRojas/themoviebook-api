@@ -18,19 +18,19 @@ mongoose.connect(process.env.CONNECTION_URI,
 const app = express();
 
 //Configure and run CORS
-// const allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://the-moviebook.herokuapp.com/'],
-//     corsOptions = {
-//         origin: (origin, callback) => {
-//             if (!origin) return callback(null, true);
-//             if(allowedOrigins.indexOf(origin) === -1) {
-//                 let message = 'The CORS policy for this application doesn\'t allow access from origin ' + origin;
-//                 return callback(new Error(message), false);
-//             }
-//             return callback(null, true);
-//         }
-//     };
-//
-//app.use(cors(corsOptions));
+const allowedOrigins = ['https://the-moviebook.herokuapp.com/', 'https://themoviebook.netlify.app/'],
+    corsOptions = {
+        origin: (origin, callback) => {
+            if (!origin) return callback(null, true);
+            if(allowedOrigins.indexOf(origin) === -1) {
+                let message = 'The CORS policy for this application doesn\'t allow access from origin ' + origin;
+                return callback(new Error(message), false);
+            }
+            return callback(null, true);
+        }
+    };
+
+app.use(cors(corsOptions));
 
 app.use(cors());
 

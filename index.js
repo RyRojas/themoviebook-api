@@ -18,7 +18,7 @@ mongoose.connect(process.env.CONNECTION_URI,
 const app = express();
 
 //Configure and run CORS
-const allowedOrigins = ['https://the-moviebook.herokuapp.com/', 'https://themoviebook.netlify.app/'],
+const allowedOrigins = ['https://the-moviebook.herokuapp.com/', 'https://themoviebook.netlify.app', 'http://localhost:1234/'],
     corsOptions = {
         origin: (origin, callback) => {
             if (!origin) return callback(null, true);

@@ -32,8 +32,8 @@ const app = express();
 //             return callback(null, true);
 //         }
 //     };
-
-app.use(cors(corsOptions));
+//
+//app.use(cors(corsOptions));
 
 app.use(cors());
 

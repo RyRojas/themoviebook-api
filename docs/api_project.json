@@ -1,0 +1,14 @@
+{
+  "name": "themoviebook-api",
+  "version": "1.0.0-alpha",
+  "description": "",
+  "sampleUrl": false,
+  "defaultVersion": "0.0.0",
+  "apidoc": "0.3.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2021-08-06T02:39:22.377Z",
+    "url": "https://apidocjs.com",
+    "version": "0.26.0"
+  }
+}

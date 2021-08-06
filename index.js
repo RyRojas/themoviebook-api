@@ -53,7 +53,24 @@ app.get('/', (req, res) => {
   res.send('You just navigated to an empty page. Why did you do that?');
 });
 
-//Retrieve list of all movies
+/**
+ * @api {get} /movies Request all movies
+ * @apiName getMovies
+ * @apiGroup Movie
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiSuccess {Object[]}   Movies List of all movies
+ * @apiSuccess {String}     Movies.Title Movie title
+ * @apiSuccess {String}     Movies.Description Movie synopsis
+ * @apiSuccess {Genre[]}    Movies.Genre Array of movie's genres
+ * @apiSuccess {Object}     Movies.Director Movie's director
+ * @apiSuccess {String}     Movies.ImagePath Image path of movie poster
+ * @apiSuccess {Boolean}    Movies.Featured Indicates whether movie is featured
+ * @apiSuccess {String}     Movies.Year Year of release
+ */
 app.get(
   '/movies',
   passport.authenticate('jwt', { session: false }),
@@ -67,7 +84,26 @@ app.get(
   }
 );
 
-//Retrieve movie by title
+/**
+ * @api {get} /movies/:title Request movie by title
+ * @apiName getMovieByTitle
+ * @apiGroup Movie
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String} Title Title of requested movie
+ *
+ * @apiSuccess {Object[]}   Movies List of all movies that match title
+ * @apiSuccess {String}     Movies.Title Movie title
+ * @apiSuccess {String}     Movies.Description Movie synopsis
+ * @apiSuccess {Genre[]}    Movies.Genre Array of movie's genres
+ * @apiSuccess {Object}     Movies.Director Movie's director
+ * @apiSuccess {String}     Movies.ImagePath Image path of movie poster
+ * @apiSuccess {Boolean}    Movies.Featured Indicates whether movie is featured
+ * @apiSuccess {String}     Movies.Year Year of release
+ */
 app.get(
   '/movies/:title',
   passport.authenticate('jwt', { session: false }),
@@ -81,7 +117,26 @@ app.get(
   }
 );
 
-//Retrieve movies by talent (may revisit to include actors while building frontend)
+/**
+ * @api {get} /movies/talent/:name Request movie by talent
+ * @apiName getMovieByTalent
+ * @apiGroup Movie
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String} Name Name of director
+ *
+ * @apiSuccess {Object[]}   Movies List of movies with matching directors
+ * @apiSuccess {String}     Movies.Title Movie title
+ * @apiSuccess {String}     Movies.Description Movie synopsis
+ * @apiSuccess {Genre[]}    Movies.Genre Array of movie's genres
+ * @apiSuccess {Object}     Movies.Director Movie's director
+ * @apiSuccess {String}     Movies.ImagePath Image path of movie poster
+ * @apiSuccess {Boolean}    Movies.Featured Indicates whether movie is featured
+ * @apiSuccess {String}     Movies.Year Year of release
+ */
 app.get(
   '/movies/talent/:name',
   passport.authenticate('jwt', { session: false }),
@@ -95,7 +150,21 @@ app.get(
   }
 );
 
-//Retrieve description of requested genre
+/**
+ * @api {get} /genress/:genreName Request genre information by name
+ * @apiName getGenreByName
+ * @apiGroup Genre
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String} Name Name of genre
+ *
+ * @apiSuccess {Object} Genre Genre Data
+ * @apiSuccess {String} Genre.Name Genre Name
+ * @apiSuccess {String} Genre.Description Genre Description
+ */
 app.get(
   '/genres/:genreName',
   passport.authenticate('jwt', { session: false }),
@@ -109,7 +178,23 @@ app.get(
   }
 );
 
-//Retrieve director bio of requested director
+/**
+ * @api {get} /directors Request director by name
+ * @apiName getDirector
+ * @apiGroup Director
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String} Name Name of director
+ *
+ * @apiSuccess {Object} Director        Director Object
+ * @apiSuccess {String} Director.Name   Director's full name
+ * @apiSuccess {String} Director.Bio    Director's biography
+ * @apiSuccess {Date}   Director.Birth  Director's date of birth
+ * @apiSuccess {Date}   Director.Death  Director's date of death
+ */
 app.get(
   '/directors/:name',
   passport.authenticate('jwt', { session: false }),
@@ -126,7 +211,19 @@ app.get(
   }
 );
 
-//Register new user -- No auth required
+/**
+ * @api {post} /users Adds new user to database
+ * @apiName registerUser
+ * @apiGroup User
+ *
+ * @apiParam {Object}      User           User Information
+ * @apiParam {String}      User.Username  User's username
+ * @apiParam {String{8..}} User.Password  User's password
+ * @apiParam {String}      User.Email     User's email
+ * @apiParam {Date}        User.Birth     User's date of birth
+ *
+ * @apiSuccess {string} Confirmation Plain text confirmation
+ */
 app.post(
   '/users',
   [
@@ -179,7 +276,25 @@ app.post(
   }
 );
 
-//Update user info
+/**
+ * @api {put} /users/:userName Edits user information
+ * @apiName editUser
+ * @apiGroup User
+ *
+ * @apiParam {String}      Username         User's username
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {Object}      User             User Information [Form Data]
+ * @apiParam {String}      [User.Username]  User's username
+ * @apiParam {String{8..}} [User.Password]  User's password
+ * @apiParam {String}      [User.Email]     User's email
+ * @apiParam {Date}        [User.Birth]     User's date of birth
+ *
+ * @apiSuccess {string} Confirmation Plain text confirmation
+ */
 app.put(
   '/users/:username',
   [
@@ -228,7 +343,23 @@ app.put(
   }
 );
 
-//Retrieve user profile
+/**
+ * @api {get} /users/:userName Request user information
+ * @apiName getUser
+ * @apiGroup User
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String}      Username         User's username
+ *
+ * @apiSuccess {Object}      User           User Information
+ * @apiSuccess {String}      User.Username  User's username
+ * @apiSuccess {String{8..}} User.Password  User's password
+ * @apiSuccess {String}      User.Email     User's email
+ * @apiSuccess {Date}        User.Birth     User's date of birth
+ */
 app.get(
   '/users/:username',
   passport.authenticate('jwt', { session: false }),
@@ -242,7 +373,19 @@ app.get(
   }
 );
 
-//Delete user account
+/**
+ * @api {delete} /users/:userName Delete user from database
+ * @apiName deleteUser
+ * @apiGroup User
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String}      Username         User's username
+ *
+ * @apiSuccess {String}    Confirmation     Plain text confirmation
+ */
 app.delete(
   '/users/:username',
   passport.authenticate('jwt', { session: false }),
@@ -262,7 +405,19 @@ app.delete(
   }
 );
 
-//Get list of user favorites
+/**
+ * @api {get} /users/:userName/favs Request list of user favorites
+ * @apiName getFavorites
+ * @apiGroup User
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String}      Username         User's username
+ *
+ * @apiSuccess {String[]}  Movies     List of user's favorite movies
+ */
 app.get(
   '/users/:username/favs',
   passport.authenticate('jwt', { session: false }),
@@ -276,7 +431,20 @@ app.get(
   }
 );
 
-//Add movie to user favorites list
+/**
+ * @api {post} /users/:userName/favs Add movie to user favorites
+ * @apiName addFavorite
+ * @apiGroup User
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String}      Username      User's username
+ * @apiParam {String}      Movie         Id of movie to add to favorites
+ *
+ * @apiSuccess {String}  Confirmation  Plain text confirmation
+ */
 app.post(
   '/users/:username/favs',
   passport.authenticate('jwt', { session: false }),
@@ -294,7 +462,20 @@ app.post(
   }
 );
 
-//Delete movie from user favorites list
+/**
+ * @api {delete} /users/:userName/favs/:movieID Remove movie from user favorites
+ * @apiName deleteFavorite
+ * @apiGroup User
+ *
+ * @apiHeader {String} Authorization JWT token
+ * @apiHeaderExample {Header} Header-Example
+ *    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+ *
+ * @apiParam {String}      Username      User's username
+ * @apiParam {String}      Movie         Id of movie to remove from favorites
+ *
+ * @apiSuccess {String}  Confirmation  Plain text confirmation
+ */
 app.delete(
   '/users/:username/favs/:movieId',
   passport.authenticate('jwt', { session: false }),

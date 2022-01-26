@@ -85,7 +85,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/genress/:genreName",
+    "url": "/genres/:genreName",
     "title": "Request genre information by name",
     "name": "getGenreByName",
     "group": "Genre",
